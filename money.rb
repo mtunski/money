@@ -1,6 +1,8 @@
 require './exchange'
 
 class Money
+  include Comparable
+
   attr_accessor :value, :currency
 
   @exchange = Exchange.new
@@ -19,6 +21,10 @@ class Money
 
   def exchange_to(currency)
     self.class.exchange.convert(self, currency)
+  end
+
+  def <=>(money)
+    exchange_to(money.currency) <=> money.value
   end
 
   class << self
