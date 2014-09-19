@@ -32,7 +32,7 @@ class Money
   end
 
   class << self
-    attr_accessor :exchange
+    attr_reader :exchange
 
     %w(usd eur gbp).each do |currency|
       define_method("from_#{currency}") do |value|
