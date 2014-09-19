@@ -17,6 +17,10 @@ class Money
     "#<#{self.class} #{to_s}>"
   end
 
+  def exchange_to(currency)
+    self.class.exchange.convert(self, currency)
+  end
+
   class << self
     attr_accessor :exchange
 
