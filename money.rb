@@ -6,10 +6,10 @@ class Money
   end
 
   def to_s
-    "#{ '%.2f' % value } #{ currency }"
+    "#{'%.2f' % value} #{currency}"
   end
 
   def inspect
-    "#<#{ self.class } #{ to_s }>"
+    "#<#{self.class} #{to_s}>"
   end
 end

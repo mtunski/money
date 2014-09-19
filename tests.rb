@@ -1,4 +1,4 @@
-require './task_1.rb'
+require './money'
 require 'minitest/autorun'
 
 class Task1Test < Minitest::Test
