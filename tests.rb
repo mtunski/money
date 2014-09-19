@@ -13,4 +13,8 @@ class Task1Test < Minitest::Test
     assert_equal 10, @money.value
     assert_equal 'USD', @money.currency
   end
+
+  def test_money_to_str
+    assert_equal '10.00 USD', @money.to_s
+  end
 end
