@@ -70,6 +70,17 @@ class MoneyTest < Minitest::Test
     assert Money(20, 'PLN') <  Money(50, 'USD')
     assert Money(20, 'PLN').between?(Money(1, 'EUR'), Money(30, 'PLN'))
   end
+
+
+  def test_money_in_case_statement
+    res = case Money(10, 'USD')
+          when Money(20, 'PLN')..Money(30, 'PLN') then 'fail'
+          when Money(30, 'PLN')..Money(40, 'PLN') then 'OK'
+          when Money(40, 'PLN')..Money(50, 'PLN') then 'fail'
+          end
+
+    assert_equal 'OK', res
+  end
 end
 
 class ExchangeTest < Minitest::Test
