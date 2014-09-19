@@ -14,6 +14,13 @@ class MoneyTest < Minitest::Test
     assert_equal 'USD', @money.currency
   end
 
+  def test_money_shorthand_initialization
+    money = Money(20, 'PLN')
+
+    assert_equal 20, money.value
+    assert_equal 'PLN', money.currency
+  end
+
   def test_money_to_str
     assert_equal '10.00 USD', @money.to_s
   end
