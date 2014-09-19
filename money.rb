@@ -15,6 +15,10 @@ class Money
     "#{format('%.2f', value)} #{currency}"
   end
 
+  def to_int
+    @value
+  end
+
   def inspect
     "#<#{self.class} #{to_s}>"
   end
