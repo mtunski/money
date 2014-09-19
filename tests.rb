@@ -34,6 +34,33 @@ class MoneyTest < Minitest::Test
     assert_equal '#<Money 10.00 EUR>', Money.from_eur(10).inspect
     assert_equal '#<Money 10.00 GBP>', Money.from_gbp(10).inspect
   end
+
+  def test_money_exchange_to
+    assert_equal 12.25332524613867, Money(20, 'USD').exchange_to('GBP')
+    assert_equal 83.7204,           Money(20, 'EUR').exchange_to('PLN')
+    assert_equal 0,                 Money(0,  'EUR').exchange_to('PLN')
+    assert_equal 1,                 Money(1,  'EUR').exchange_to('EUR')
+  end
+
+  def test_money_exchange_to_raises_exception_with_appropriate_message_when_currency_is_invalid
+    err = assert_raises Exchange::InvalidCurrency do Money(20, 'GBP').exchange_to('') end
+    assert_equal "Invalid currencies: ", err.message
+
+    err = assert_raises Exchange::InvalidCurrency do Money(20, '').exchange_to('GBP') end
+    assert_equal "Invalid currencies: ", err.message
+
+    err = assert_raises Exchange::InvalidCurrency do Money(20, 'GBP').exchange_to('AAA') end
+    assert_equal "Invalid currencies: AAA", err.message
+
+    err = assert_raises Exchange::InvalidCurrency do Money(20, 'AAA').exchange_to('GBP') end
+    assert_equal "Invalid currencies: AAA", err.message
+
+    err = assert_raises Exchange::InvalidCurrency do Money(20, 'AAA').exchange_to('AAA') end
+    assert_equal "Invalid currencies: AAA", err.message
+
+    err = assert_raises Exchange::InvalidCurrency do Money(20, 'AAA').exchange_to('ZZZ') end
+    assert_equal "Invalid currencies: AAA, ZZZ", err.message
+  end
 end
 
 class ExchangeTest < Minitest::Test
