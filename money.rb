@@ -22,8 +22,6 @@ class Money
   end
 end
 
-class Object
-  def Money(value, currency)
-    Money.new(value, currency)
-  end
+def Money(value, currency)
+  Money.new(value, currency)
 end
