@@ -1,7 +1,7 @@
 require './money'
 require 'minitest/autorun'
 
-class Task1Test < Minitest::Test
+class MoneyTest < Minitest::Test
   def setup
     @money = Money.new(10, 'USD')
   end
