@@ -25,7 +25,7 @@ class Money
     attr_accessor :exchange
 
     %w(usd eur gbp).each do |currency|
-      define_method("from_#{ currency }") do |value|
+      define_method("from_#{currency}") do |value|
         new(value, currency.upcase)
       end
     end
