@@ -21,4 +21,15 @@ class MoneyTest < Minitest::Test
   def test_money_inspect
     assert_equal '#<Money 10.00 USD>', @money.inspect
   end
+
+  def test_money_from_currency
+    value           = 10
+    value_formatted = '%.2f' % value
+
+    usd, eur, gbp = Money.from_usd(value), Money.from_eur(value), Money.from_gbp(value)
+
+    assert_equal "#{value_formatted} USD", usd.to_s
+    assert_equal "#{value_formatted} EUR", eur.to_s
+    assert_equal "#{value_formatted} GBP", gbp.to_s
+  end
 end
