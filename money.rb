@@ -6,7 +6,7 @@ class Money
   end
 
   def to_s
-    "#{'%.2f' % value} #{currency}"
+    "#{format('%.2f', value)} #{currency}"
   end
 
   def inspect
