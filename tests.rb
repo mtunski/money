@@ -17,4 +17,8 @@ class Task1Test < Minitest::Test
   def test_money_to_str
     assert_equal '10.00 USD', @money.to_s
   end
+
+  def test_money_inspect
+    assert_equal '#<Money 10.00 USD>', @money.inspect
+  end
 end
