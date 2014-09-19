@@ -10,7 +10,7 @@ class Task1Test < Minitest::Test
   end
 
   def test_money_initialization
-    assert_equal @money.value, 10
-    assert_equal @money.currency, 'USD'
+    assert_equal 10, @money.value
+    assert_equal 'USD', @money.currency
   end
 end
