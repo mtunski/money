@@ -1,5 +1,9 @@
+require './exchange'
+
 class Money
   attr_accessor :value, :currency
+
+  @exchange = Exchange.new
 
   def initialize(value, currency)
     @value, @currency = value, currency
@@ -14,6 +18,8 @@ class Money
   end
 
   class << self
+    attr_accessor :exchange
+
     %w(usd eur gbp).each do |currency|
       define_method("from_#{ currency }") do |value|
         new(value, currency.upcase)
