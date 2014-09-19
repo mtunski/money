@@ -63,12 +63,12 @@ class MoneyTest < Minitest::Test
   end
 
   def test_money_comparisons
-    assert Money(20, "PLN") == Money(20, "PLN")
-    assert Money(10, "PLN") >= Money(1,  "USD")
-    assert Money(20, "PLN") >  Money(2,  "USD")
-    assert Money(20, "JPY") <= Money(90, "EUR")
-    assert Money(20, "PLN") <  Money(50, "USD")
-    assert Money(20, "PLN").between?(Money(1, "EUR"), Money(30, "PLN"))
+    assert Money(20, 'PLN') == Money(20, 'PLN')
+    assert Money(10, 'PLN') >= Money(1,  'USD')
+    assert Money(20, 'PLN') >  Money(2,  'USD')
+    assert Money(20, 'JPY') <= Money(90, 'EUR')
+    assert Money(20, 'PLN') <  Money(50, 'USD')
+    assert Money(20, 'PLN').between?(Money(1, 'EUR'), Money(30, 'PLN'))
   end
 end
 
