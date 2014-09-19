@@ -61,6 +61,15 @@ class MoneyTest < Minitest::Test
     err = assert_raises Exchange::InvalidCurrency do Money(20, 'AAA').exchange_to('ZZZ') end
     assert_equal 'Invalid currencies: AAA, ZZZ', err.message
   end
+
+  def test_money_comparisons
+    assert Money(20, "PLN") == Money(20, "PLN")
+    assert Money(10, "PLN") >= Money(1,  "USD")
+    assert Money(20, "PLN") >  Money(2,  "USD")
+    assert Money(20, "JPY") <= Money(90, "EUR")
+    assert Money(20, "PLN") <  Money(50, "USD")
+    assert Money(20, "PLN").between?(Money(1, "EUR"), Money(30, "PLN"))
+  end
 end
 
 class ExchangeTest < Minitest::Test
