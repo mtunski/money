@@ -8,4 +8,8 @@ class Money
   def to_s
     "#{ '%.2f' % value } #{ currency }"
   end
+
+  def inspect
+    "#<#{ self.class } #{ to_s }>"
+  end
 end
