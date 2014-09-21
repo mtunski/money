@@ -44,22 +44,22 @@ class MoneyTest < Minitest::Test
 
   def test_money_exchange_to_raises_exception_with_appropriate_message_when_currency_is_invalid
     err = assert_raises Exchange::InvalidCurrency do Money(20, 'GBP').exchange_to('') end
-    assert_equal 'Invalid currencies: ', err.message
+    assert_equal 'Please, provide both currencies', err.message
 
     err = assert_raises Exchange::InvalidCurrency do Money(20, '').exchange_to('GBP') end
-    assert_equal 'Invalid currencies: ', err.message
+    assert_equal 'Please, provide both currencies', err.message
 
     err = assert_raises Exchange::InvalidCurrency do Money(20, 'GBP').exchange_to('AAA') end
-    assert_equal 'Invalid currencies: AAA', err.message
+    assert_equal 'Invalid currency: AAA', err.message
 
     err = assert_raises Exchange::InvalidCurrency do Money(20, 'AAA').exchange_to('GBP') end
-    assert_equal 'Invalid currencies: AAA', err.message
+    assert_equal 'Invalid currency: AAA', err.message
 
     err = assert_raises Exchange::InvalidCurrency do Money(20, 'AAA').exchange_to('AAA') end
-    assert_equal 'Invalid currencies: AAA', err.message
+    assert_equal 'Invalid currency: AAA', err.message
 
     err = assert_raises Exchange::InvalidCurrency do Money(20, 'AAA').exchange_to('ZZZ') end
-    assert_equal 'Invalid currencies: AAA, ZZZ', err.message
+    assert_equal 'Invalid currency: AAA', err.message
   end
 
   def test_money_comparisons
@@ -100,21 +100,21 @@ class ExchangeTest < Minitest::Test
 
   def test_exchange_convert_raises_exception_with_appropriate_message_when_currency_is_invalid
     err = assert_raises Exchange::InvalidCurrency do @exchange.convert(Money(20, 'GBP'), '') end
-    assert_equal 'Invalid currencies: ', err.message
+    assert_equal 'Please, provide both currencies', err.message
 
     err = assert_raises Exchange::InvalidCurrency do @exchange.convert(Money(20, ''),    'GBP') end
-    assert_equal 'Invalid currencies: ', err.message
+    assert_equal 'Please, provide both currencies', err.message
 
     err = assert_raises Exchange::InvalidCurrency do @exchange.convert(Money(20, 'GBP'), 'AAA') end
-    assert_equal 'Invalid currencies: AAA', err.message
+    assert_equal 'Invalid currency: AAA', err.message
 
     err = assert_raises Exchange::InvalidCurrency do @exchange.convert(Money(20, 'AAA'), 'GBP') end
-    assert_equal 'Invalid currencies: AAA', err.message
+    assert_equal 'Invalid currency: AAA', err.message
 
     err = assert_raises Exchange::InvalidCurrency do @exchange.convert(Money(20, 'AAA'), 'AAA') end
-    assert_equal 'Invalid currencies: AAA', err.message
+    assert_equal 'Invalid currency: AAA', err.message
 
     err = assert_raises Exchange::InvalidCurrency do @exchange.convert(Money(20, 'AAA'), 'ZZZ') end
-    assert_equal 'Invalid currencies: AAA, ZZZ', err.message
+    assert_equal 'Invalid currency: AAA', err.message
   end
 end
