@@ -81,6 +81,29 @@ class MoneyTest < Minitest::Test
 
     assert_equal 'OK', res
   end
+
+  def test_money_using_default_currency
+    Money.using_default_currency('USD') do
+      assert_equal Money.new(100, 'USD'), Money.new(100)
+      assert_equal     Money(100, 'USD'),     Money(100)
+
+      Money.using_default_currency('EUR') do
+        assert_equal Money.new(100, 'EUR'), Money.new(100)
+        assert_equal     Money(100, 'EUR'),     Money(100)
+      end
+
+      # assert_equal Money.new(100, 'USD'), Money.new(100)
+      # assert_equal     Money(100, 'USD'),     Money(100)
+    end
+  end
+
+  def test_money_initialization_raises_exception_with_appropriate_message_when_no_currency_defined
+    err = assert_raises ArgumentError do Money.new(100) end
+    assert_equal 'Currency not set!', err.message
+
+    err = assert_raises ArgumentError do Money(100) end
+    assert_equal 'Currency not set!', err.message
+  end
 end
 
 class ExchangeTest < Minitest::Test
