@@ -7,7 +7,9 @@ class Money
 
   @exchange = Exchange.new
 
-  def initialize(value, currency)
+  def initialize(value, currency=self.class.default_currency)
+    raise ArgumentError, 'Currency not set!' if currency.nil?
+
     @value, @currency = value, currency
   end
 
@@ -32,16 +34,24 @@ class Money
   end
 
   class << self
-    attr_reader :exchange
+    attr_reader :exchange, :default_currency
 
     %w(usd eur gbp).each do |currency|
       define_method("from_#{currency}") do |value|
         new(value, currency.upcase)
       end
     end
+
+    def using_default_currency(currency)
+      @default_currency = currency
+
+      yield
+
+      @default_currency = nil
+    end
   end
 end
 
-def Money(value, currency)
+def Money(value, currency=Money.default_currency)
   Money.new(value, currency)
 end
