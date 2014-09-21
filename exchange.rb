@@ -36,16 +36,12 @@ class Exchange
   end
 
   def convert(money, currency)
-    conversion          = "#{money.currency.downcase}_#{currency.downcase}"
-    conversion_inverted = "#{currency.downcase}_#{money.currency.downcase}"
+    raise InvalidCurrency, money.currency unless currency_supported?(money.currency)
+    raise InvalidCurrency, currency unless currency_supported?(currency)
 
-    if rates[conversion]
-      rate = rates[conversion]
-    elsif rates[conversion_inverted]
-      rate = 1 / rates[conversion_inverted]
-    else
-      raise InvalidCurrency, currency_supported?(money.currency) ? currency : money.currency
-    end
+    conversion = "#{money.currency.downcase}_#{currency.downcase}"
+
+    rate = get_rate(conversion)
 
     rate * money.value
   end
@@ -61,5 +57,12 @@ class Exchange
     end
 
     false
+  end
+
+  def get_rate(conversion)
+    currencies          = conversion.split('_')
+    conversion_inverted = "#{currencies[1]}_#{currencies[0]}"
+
+    rates[conversion] ? rates[conversion] : 1 / rates[conversion_inverted]
   end
 end
