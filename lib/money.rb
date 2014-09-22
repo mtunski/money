@@ -46,7 +46,23 @@ class Money
   end
 
   def <=>(money)
-    exchange_to(money.currency) <=> money.value
+    exchange_to(money.currency).to_d <=> money.value.to_d
+  end
+
+  def +(money)
+    (@value.to_d + money.exchange_to(@currency).to_d).to_f
+  end
+
+  def -(money)
+    (@value.to_d - money.exchange_to(@currency).to_d).to_f
+  end
+
+  def *(number)
+    (@value.to_d * number.to_d).to_f
+  end
+
+  def /(number)
+    (@value.to_d / number.to_d).to_f
   end
 
   class << self
