@@ -123,4 +123,11 @@ class MoneyTest < Minitest::Test
     refute @money.respond_to? :to_aaa
     refute @money.respond_to? :aaa
   end
+
+  def test_money_arithmetics
+    assert_equal 11.28421, @money + Money(1, 'EUR')
+    assert_equal 8.71579,  @money - Money(1, 'EUR')
+    assert_equal 20,       @money * 2
+    assert_equal 5,        @money / 2
+  end
 end
