@@ -35,4 +35,18 @@ class ExchangeTest < Minitest::Test
     err = assert_raises Exchange::InvalidCurrency do @exchange.convert(Money(20, 'AAA'), 'ZZZ') end
     assert_equal 'Invalid currency: AAA', err.message
   end
+
+  def test_exchange_convert_raises_exception_with_appropriate_message_when_rates_not_fetched
+    err = assert_raises Exchange::RatesMissingError do @exchange.convert(Money(20, 'GBP'), '') end
+    assert_equal 'You have to fetch the conversion rates before converting!', err.message
+  end
+
+  def test_exchange_fetch_rates
+    assert_nil @exchange.rates
+
+    @exchange.fetch_rates
+
+    assert_kind_of Hash, @exchange.rates
+    assert_equal   21,   @exchange.rates.size
+  end
 end
