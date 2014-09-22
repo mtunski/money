@@ -23,7 +23,7 @@ class Money
     super
   end
 
-  %w(eur pln gbp usd chf jpy).each do |currency|
+  Exchange.currencies.each do |currency|
     define_method("to_#{currency}") do
       exchange_to(currency)
     end
@@ -52,7 +52,7 @@ class Money
   class << self
     attr_reader :exchange, :default_currency
 
-    %w(eur pln gbp usd chf jpy).each do |currency|
+    Exchange.currencies.each do |currency|
       define_method("from_#{currency}") do |value|
         new(value, currency.upcase)
       end

@@ -1,5 +1,6 @@
 require 'bigdecimal'
 require 'bigdecimal/util'
+require 'open-uri'
 
 class Exchange
   class InvalidCurrency < StandardError
@@ -10,37 +11,18 @@ class Exchange
     end
   end
 
+  RateFetchError    = Class.new(StandardError)
+  RatesMissingError = Class.new(StandardError)
+
+  class << self; attr_accessor :currencies end
   attr_accessor :rates
 
-  def initialize
-    @rates = {
-      'eur_eur' => 1,
-      'pln_pln' => 1,
-      'gbp_gbp' => 1,
-      'usd_usd' => 1,
-      'chf_chf' => 1,
-      'jpy_jpy' => 1,
-      'eur_pln' => 4.1860200000000001,
-      'eur_gbp' => 0.78663899999999998,
-      'eur_usd' => 1.2842100000000001,
-      'eur_chf' => 1.2069399999999999,
-      'eur_jpy' => 139.82900000000001,
-      'pln_gbp' => 0.188109,
-      'pln_usd' => 0.30696899999999999,
-      'pln_chf' => 0.28841600000000001,
-      'pln_jpy' => 33.414700000000003,
-      'gbp_usd' => 1.6322099999999999,
-      'gbp_chf' => 1.5336399999999999,
-      'gbp_jpy' => 177.63399999999999,
-      'usd_chf' => 0.93984500000000004,
-      'usd_jpy' => 108.866,
-      'chf_jpy' => 115.85899999999999
-    }
-  end
+  @currencies = %w(eur pln gbp usd chf jpy)
 
   def convert(money, currency)
-    raise InvalidCurrency, money.currency unless currency_supported?(money.currency)
-    raise InvalidCurrency, currency unless currency_supported?(currency)
+    raise RatesMissingError, 'You have to fetch the conversion rates before converting!' unless @rates
+    raise InvalidCurrency,   money.currency unless currency_supported?(money.currency)
+    raise InvalidCurrency,   currency       unless currency_supported?(currency)
 
     conversion = "#{money.currency.downcase}_#{currency.downcase}"
 
@@ -49,17 +31,28 @@ class Exchange
     rate * money.value.to_d
   end
 
+  def fetch_rates
+    currencies  = self.class.currencies
+    conversions = currencies.map { |c| [c, c] }.concat(currencies.combination(2).to_a)
+    @rates      = {}
+
+    conversions.each do |conversion|
+      from, to = conversion[0], conversion[1]
+      uri      = "http://rate-exchange.appspot.com/currency?from=#{from}&to=#{to}"
+      response = open(uri).read
+
+      raise RateFetchError, 'An error occurred while fetching the rates from the server.' if response =~ /err/
+
+      @rates["#{from}_#{to}"] = response.slice(/\d+.\d+/)
+    end
+
+    @rates
+  end
+
   private
 
   def currency_supported?(currency)
-    @rates.each_key do |key|
-      currency_1, currency_2 = key.split('_')
-
-      break if currency_1 != currency_2
-      return true if currency_1 == currency.downcase
-    end
-
-    false
+    self.class.currencies.include?(currency.downcase)
   end
 
   def get_rate(conversion)
