@@ -13,6 +13,22 @@ class Money
     @value, @currency = value, currency
   end
 
+  def method_missing(method)
+    if method.to_s =~ /^to_(.+)$/
+      currency = method.to_s.split('_')[1]
+
+      raise NoMethodError, "No method #{method} - currency '#{currency}' unsupported"
+    end
+
+    super
+  end
+
+  %w(eur pln gbp usd chf jpy).each do |currency|
+    define_method("to_#{currency}") do
+      exchange_to(currency)
+    end
+  end
+
   def to_s
     "#{format('%.2f', value)} #{currency}"
   end
@@ -36,7 +52,7 @@ class Money
   class << self
     attr_reader :exchange, :default_currency
 
-    %w(usd eur gbp).each do |currency|
+    %w(eur pln gbp usd chf jpy).each do |currency|
       define_method("from_#{currency}") do |value|
         new(value, currency.upcase)
       end
