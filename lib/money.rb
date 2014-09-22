@@ -1,4 +1,4 @@
-require './exchange'
+require 'money/exchange'
 
 class Money
   include Comparable
