@@ -1,3 +1,6 @@
+require 'bigdecimal'
+require 'bigdecimal/util'
+
 class Exchange
   class InvalidCurrency < StandardError
     def initialize(currency)
@@ -43,7 +46,7 @@ class Exchange
 
     rate = get_rate(conversion)
 
-    rate * money.value
+    rate * money.value.to_d
   end
 
   private
@@ -63,6 +66,6 @@ class Exchange
     currencies          = conversion.split('_')
     conversion_inverted = "#{currencies[1]}_#{currencies[0]}"
 
-    rates[conversion] ? rates[conversion] : 1 / rates[conversion_inverted]
+    rates[conversion] ? rates[conversion].to_d : 1.to_d / rates[conversion_inverted].to_d
   end
 end
