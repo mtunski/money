@@ -10,10 +10,10 @@ class ExchangeTest < Minitest::Test
   end
 
   def test_exchange_convert
-    assert_equal 12.25332524613867, @exchange.convert(Money(20, 'USD'), 'GBP')
-    assert_equal 83.7204,           @exchange.convert(Money(20, 'EUR'), 'PLN')
-    assert_equal 0,                 @exchange.convert(Money(0,  'EUR'), 'PLN')
-    assert_equal 1,                 @exchange.convert(Money(1,  'EUR'), 'EUR')
+    assert_equal 12.25332524613867, @exchange.convert(Money(20, 'USD'), 'GBP').to_f
+    assert_equal 83.7204,           @exchange.convert(Money(20, 'EUR'), 'PLN').to_f
+    assert_equal 0,                 @exchange.convert(Money(0,  'EUR'), 'PLN').to_f
+    assert_equal 1,                 @exchange.convert(Money(1,  'EUR'), 'EUR').to_f
   end
 
   def test_exchange_convert_raises_exception_with_appropriate_message_when_currency_is_invalid

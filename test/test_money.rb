@@ -36,10 +36,10 @@ class MoneyTest < Minitest::Test
   end
 
   def test_money_exchange_to
-    assert_equal 12.25332524613867, Money(20, 'USD').exchange_to('GBP')
-    assert_equal 83.7204,           Money(20, 'EUR').exchange_to('PLN')
-    assert_equal 0,                 Money(0,  'EUR').exchange_to('PLN')
-    assert_equal 1,                 Money(1,  'EUR').exchange_to('EUR')
+    assert_equal 12.25332524613867, Money(20, 'USD').exchange_to('GBP').to_f
+    assert_equal 83.7204,           Money(20, 'EUR').exchange_to('PLN').to_f
+    assert_equal 0,                 Money(0,  'EUR').exchange_to('PLN').to_f
+    assert_equal 1,                 Money(1,  'EUR').exchange_to('EUR').to_f
   end
 
   def test_money_exchange_to_raises_exception_with_appropriate_message_when_currency_is_invalid
@@ -106,10 +106,10 @@ class MoneyTest < Minitest::Test
   end
 
   def test_money_to_currency
-    assert_equal 12.25332524613867, Money(20, 'USD').to_gbp
-    assert_equal 83.7204,           Money(20, 'EUR').to_pln
-    assert_equal 0,                 Money(0,  'EUR').to_pln
-    assert_equal 1,                 Money(1,  'EUR').to_eur
+    assert_equal 12.25332524613867, Money(20, 'USD').to_gbp.to_f
+    assert_equal 83.7204,           Money(20, 'EUR').to_pln.to_f
+    assert_equal 0,                 Money(0,  'EUR').to_pln.to_f
+    assert_equal 1,                 Money(1,  'EUR').to_eur.to_f
   end
 
   def test_money_to_currency_raises_exception_with_appropriate_message_when_method_missing
