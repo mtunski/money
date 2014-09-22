@@ -104,6 +104,27 @@ class MoneyTest < Minitest::Test
     err = assert_raises ArgumentError do Money(100) end
     assert_equal 'Currency not set!', err.message
   end
+
+  def test_money_to_currency
+    assert_equal 12.25332524613867, Money(20, 'USD').to_gbp
+    assert_equal 83.7204,           Money(20, 'EUR').to_pln
+    assert_equal 0,                 Money(0,  'EUR').to_pln
+    assert_equal 1,                 Money(1,  'EUR').to_eur
+  end
+
+  def test_money_to_currency_raises_exception_with_appropriate_message_when_method_missing
+    err = assert_raises NoMethodError do @money.to_aaa end
+    assert_equal "No method to_aaa - currency 'aaa' unsupported", err.message
+
+    err = assert_raises NoMethodError do @money.aaa end
+    assert_equal "undefined method `aaa' for #<Money 10.00 USD>", err.message
+  end
+
+  def test_money_respond_to
+    assert @money.respond_to? 'to_eur'
+    refute @money.respond_to? 'to_aaa'
+    refute @money.respond_to? 'aaa'
+  end
 end
 
 class ExchangeTest < Minitest::Test
