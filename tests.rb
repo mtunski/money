@@ -121,9 +121,9 @@ class MoneyTest < Minitest::Test
   end
 
   def test_money_respond_to
-    assert @money.respond_to? 'to_eur'
-    refute @money.respond_to? 'to_aaa'
-    refute @money.respond_to? 'aaa'
+    assert @money.respond_to? :to_eur
+    refute @money.respond_to? :to_aaa
+    refute @money.respond_to? :aaa
   end
 end
 
