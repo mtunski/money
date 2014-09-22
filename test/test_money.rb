@@ -4,6 +4,8 @@ require 'money'
 class MoneyTest < Minitest::Test
   def setup
     @money = Money.new(10, 'USD')
+
+    mock_rates(Money.exchange)
   end
 
   def teardown
