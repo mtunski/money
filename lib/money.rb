@@ -75,14 +75,14 @@ class Money
     end
 
     def using_default_currency(currency)
-      temp_currency     = @default_currency
-      @default_currency = currency
+      begin
+        temp_currency     = @default_currency
+        @default_currency = currency
 
-      block_result = yield
-
-      @default_currency = temp_currency
-
-      block_result
+        yield
+      ensure
+        @default_currency = temp_currency
+      end
     end
   end
 end
