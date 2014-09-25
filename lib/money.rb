@@ -1,3 +1,6 @@
+require 'bigdecimal'
+require 'bigdecimal/util'
+
 require 'money/exchange'
 
 class Money
@@ -10,7 +13,7 @@ class Money
   def initialize(value, currency=self.class.default_currency)
     raise ArgumentError, 'Currency not set!' if currency.nil?
 
-    @value, @currency = value, currency
+    @value, @currency = value.to_d, currency
   end
 
   def method_missing(method, *args)
@@ -34,7 +37,7 @@ class Money
   end
 
   def to_int
-    @value
+    @value.to_int
   end
 
   def inspect
@@ -46,7 +49,7 @@ class Money
   end
 
   def <=>(money)
-    exchange_to(money.currency).to_d <=> money.value.to_d
+    exchange_to(money.currency).value <=> money.value
   end
 
   def +(money)
