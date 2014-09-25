@@ -3,7 +3,7 @@ require 'bigdecimal/util'
 require 'open-uri'
 
 class Exchange
-  class InvalidCurrency < StandardError
+  class InvalidCurrencyError < StandardError
     def initialize(currency)
       msg = currency.empty? ? 'Please, provide both currencies' : "Invalid currency: #{currency}"
 
@@ -11,8 +11,8 @@ class Exchange
     end
   end
 
-  RateFetchError    = Class.new(StandardError)
-  RatesMissingError = Class.new(StandardError)
+  RateFetchError   = Class.new(StandardError)
+  RateMissingError = Class.new(StandardError)
 
   class << self; attr_accessor :currencies end
   attr_accessor :rates
