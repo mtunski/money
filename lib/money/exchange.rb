@@ -1,5 +1,3 @@
-require 'bigdecimal'
-require 'bigdecimal/util'
 require 'open-uri'
 
 class Exchange
