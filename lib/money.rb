@@ -13,20 +13,20 @@ class Money
     @value, @currency = value, currency
   end
 
-  def method_missing(method)
-    if method.to_s =~ /^to_(.+)$/
-      currency = method.to_s.split('_')[1]
-
-      raise NoMethodError, "No method #{method} - currency '#{currency}' unsupported"
+  def method_missing(method, *args)
+    if currency = currency_from_missing_method_name(method)
+      exchange_to(currency)
+    else
+      super
     end
-
-    super
   end
 
-  Exchange.currencies.each do |currency|
-    define_method("to_#{currency}") do
-      exchange_to(currency)
-    end
+  def respond_to_missing?(method, *)
+    !!currency_from_missing_method_name(method) || super
+  end
+
+  def currency_from_missing_method_name(method)
+    $1.upcase if method.to_s =~ /\Ato_(.+)\z/ && Exchange.currencies.include?($1)
   end
 
   def to_s
