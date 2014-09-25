@@ -23,45 +23,32 @@ class Exchange
   end
 
   def convert(money, currency)
-    raise RatesMissingError, 'You have to fetch the conversion rates before converting!' unless @rates
-    raise InvalidCurrency,   money.currency unless currency_supported?(money.currency)
-    raise InvalidCurrency,   currency       unless currency_supported?(currency)
+    raise InvalidCurrencyError, money.currency unless currency_supported?(money.currency)
+    raise InvalidCurrencyError, currency       unless currency_supported?(currency)
+    raise RateMissingError, 'You have to fetch the conversion rate before converting!' unless rate = rate(money.currency, currency)
 
-    conversion = "#{money.currency.downcase}_#{currency.downcase}"
-
-    rate = get_rate(conversion)
-
-    rate * money.value.to_d
+    Money.new(money.value * rate, currency)
   end
 
-  def fetch_rates
-    currencies  = self.class.currencies
-    conversions = currencies.map { |c| [c, c] }.concat(currencies.combination(2).to_a)
-    @rates      = {}
-
-    conversions.each do |conversion|
-      from, to = conversion[0], conversion[1]
+  def fetch_rate(from, to)
+    rates["#{from}_#{to}"] ||= begin
       uri      = "http://rate-exchange.appspot.com/currency?from=#{from}&to=#{to}"
-      response = open(uri).read
+      response = JSON.parse(open(uri).read)
 
-      raise RateFetchError, 'An error occurred while fetching the rates from the server.' if response =~ /err/
+      raise RateFetchError, 'An error occurred while fetching the rates from the server.' if response['err']
 
-      @rates["#{from}_#{to}"] = response.slice(/\d+.\d+/)
+      @rates["#{to}_#{from}"] = 1 / response['rate']
+      @rates["#{from}_#{to}"] = response['rate']
     end
-
-    @rates
   end
 
   private
 
-  def currency_supported?(currency)
-    self.class.currencies.include?(currency.downcase)
+  def rate(from, to)
+    rates["#{from}_#{to}"] || rates["#{to}_#{from}"]
   end
 
-  def get_rate(conversion)
-    currencies          = conversion.split('_')
-    conversion_inverted = "#{currencies[1]}_#{currencies[0]}"
-
-    rates[conversion] ? rates[conversion].to_d : 1.to_d / rates[conversion_inverted].to_d
+  def currency_supported?(currency)
+    self.class.currencies.include?(currency.downcase)
   end
 end
