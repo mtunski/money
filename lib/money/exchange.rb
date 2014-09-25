@@ -1,4 +1,5 @@
 require 'open-uri'
+require 'json'
 
 class Exchange
   class InvalidCurrencyError < StandardError
