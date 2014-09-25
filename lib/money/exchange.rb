@@ -12,10 +12,14 @@ class Exchange
   RateFetchError   = Class.new(StandardError)
   RateMissingError = Class.new(StandardError)
 
-  class << self; attr_accessor :currencies end
   attr_accessor :rates
+  class << self; attr_accessor :currencies end
 
   @currencies = %w(eur pln gbp usd chf jpy)
+
+  def initialize
+    @rates = {}
+  end
 
   def convert(money, currency)
     raise RatesMissingError, 'You have to fetch the conversion rates before converting!' unless @rates
