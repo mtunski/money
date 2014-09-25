@@ -87,6 +87,6 @@ class Money
   end
 end
 
-def Money(value, currency=Money.default_currency)
-  Money.new(value, currency)
+def Money(*args)
+  Money.new(*args)
 end
