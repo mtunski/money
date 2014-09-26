@@ -49,6 +49,8 @@ class Money
   end
 
   def <=>(money)
+    raise ArgumentError unless money.respond_to?('exchange_to')
+
     exchange_to(money.currency).value <=> money.value
   end
 
